@@ -2,8 +2,14 @@
 This is my exam task that I completed in a limited time.
 
 Technologies used:
-# PHP Object-oriented programming
-# Symfony Framework
+PHP Object-oriented programming
+Symfony Framework
+Javascript (Stimulus)
+Ajax/Axios
+SCSS
+Bootstrap
+Twig
+Npm/Yarn
 
 First page.
 ![Screenshot 2021-02-24 005403](https://user-images.githubusercontent.com/70883106/108918957-dfcf0800-763a-11eb-912c-884daea1cd71.jpg)
