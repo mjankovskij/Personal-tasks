@@ -2,8 +2,11 @@
 This is my exam task that I completed in a limited time.
 
 Technologies used:
+
 PHP Object-oriented programming
+
 Symfony Framework
+
 Javascript (Stimulus)
 Ajax/Axios
 SCSS
