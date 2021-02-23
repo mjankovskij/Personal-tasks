@@ -6,6 +6,7 @@ Technologies used:
 PHP Object-oriented programming
 Symfony Framework
 Javascript (Stimulus)
+
 Ajax/Axios
 SCSS
 Bootstrap
