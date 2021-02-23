@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>
+			{% block title %}Tasks scheduler
+			{% endblock %}
+		</title>
+
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		{{ encore_entry_link_tags('app') }}
+		{% block stylesheets %}{% endblock %}
+
+		{{ encore_entry_script_tags('app') }}
+		{% block javascripts %}{% endblock %}
+	</head>
+	<body>
+		{% include "header.html.twig" %}
+		{% block body %}{% endblock %}
+	</body>
+</html>

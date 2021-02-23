@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+			{% block title %}Tasks scheduler - Statuses
+			{% endblock %}
+
+{% block body %}
+
+	<div class='blur' data-controller="status" data-action="click->status#close"></div>
+
+	{% if app.user %}
+		<div class="row">
+			<div class="col-lg-8">
+				<button type="button" class="btn bg-custom2 mb-2 col-lg-12 d-inline" data-controller="status" data-action="click->status#editor">
+					Add status
+				</button>
+			</div>
+			<div class="col-sm">
+			{% endif %}
+			{% set arrPaths = app.request.pathinfo|split('/') %}
+			<select class="form-control bg-custom2 col-lg-12 d-inline" name="sort" onchange="location = this.value;">
+				<option value='#' {% if arrPaths[2] ?? 0 == 0 %} selected {% endif %}>Sort by</option>
+				{% for key,choice in sort %}
+					<option {% if arrPaths[2] ?? 0 == key %} selected {% endif %} value={{ base_url ~ '/' ~ key }}>{{ choice.1.name }}</option>
+				{% endfor %}
+			</select>
+			{% if app.user %}
+			</div>
+		</div>
+		<div class='adminBox' style="max-width: 500px;">
+			{{form_start(addstatusForm)}}
+			<div class='box1'>
+				{{ form_row(addstatusForm.name, { label: 'Status name'})  }}
+			</div>
+			<div class='error'></div>
+			{{ form_row(addstatusForm.save) }}
+			{{form_end(addstatusForm)}}
+		</div>
+
+	{% endif %}
+
+	<div class="container-fluid">
+		<div class="row">
+			{% for status in statuses %}
+
+				<div class='status col-xl-12 bg-custom bg-gradient' tabindex='0' data-controller="status" data-action="click->status#view">
+
+					{% if app.user %}
+						<div class='options' tabindex='0'>
+							<i class="fa fa-angle-down" aria-hidden="true"></i>
+							<p class='edit' id='{{ status.id }}' data-controller="status" data-action="click->status#get">Edit</p>
+							<p class='delete' id='{{ status.id }}' data-controller="status" data-action="click->status#delete">Delete</p>
+						</div>
+					{% endif %}
+
+					<h1>{{ status.name }}</h1>
+					<div class='error' id='error_{{ status.id }}'></div>
+
+					<div class='tasks'>
+						<h1>Tasks</h1>
+
+						{% for task in status.tasks %}
+							<p>{{ task.taskName }}
+								(ID:
+								{{ task.id }})</p>
+						{% endfor %}
+
+
+						{% if status.tasks|length < 1 %}
+					<div class='error'>There are no tasks for this status.</div>
+						{% endif %}
+
+					</div>
+
+				</div>
+			{% endfor %}
+		</div>
+	{% endblock %}

@@ -1,0 +1,62 @@
+<nav class="navbar fixed-top navbar-expand-sm navbar-light bg-custom bg-gradient">
+	<a class="navbar-brand" href="#">Tasks scheduler</a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse" id="navbarNav">
+		<ul class="navbar-nav">
+			<li class="nav-item">
+				<a class="nav-link" href="{{ url('index') }}">Home</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="{{ url('tasks_page') }}">Tasks</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="{{ url('statuses_page') }}">Statuses</a>
+			</li>
+{% if app.user %}
+			<li class="nav-item">
+				<a class="nav-link" href="{{ url('app_logout') }}">Log out</a>
+			</li>
+
+{% else %}
+			<li class="nav-item">
+				<a class="nav-link" href="#" data-controller="auth" data-action="click->auth#expand">Sign In</a>
+			</li>
+{% endif %}
+		</ul>
+	</div>
+</nav>
+
+{% if app.user == false %}
+	<div class='authBox float-right text-light bg-custom col-lg-4'>
+		<div class='auth'>
+				<h1>Sign in</h1>
+			{{ form_start(loginForm) }}
+			{{ form_row(loginForm.email) }}
+			{{ form_row(loginForm.password) }}
+			<div class='error'></div>
+			{{ form_row(loginForm.sign, { label: 'Sign In'}) }}
+			{{ form_end(loginForm) }}
+			<div class='method'>
+				Don't have an account?
+				<span data-controller="auth" data-action="click->auth#switch">Sign Up</span>
+			</div>
+		</div>
+
+		<div class='auth'>
+			<h1>Sign Up</h1>
+			{{ form_start(registrationForm) }}
+			{{ form_row(registrationForm.email) }}
+			{{ form_row(registrationForm.name) }}
+			{{ form_row(registrationForm.plainPassword, { label: 'Password'}) }}
+			<div class='error'></div>
+			{{ form_row(registrationForm.sign, { label: 'Sign Up'}) }}
+			{{ form_end(registrationForm) }}
+			<div class='method'>
+				Already have an account?
+				<span data-controller="auth" data-action="click->auth#switch">Sign In</span>
+			</div>
+		</div>
+	</div>
+{% endif %}

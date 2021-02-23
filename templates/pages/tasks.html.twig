@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+			{% block title %}Tasks scheduler - Tasks
+			{% endblock %}
+
+{% block body %}
+
+	<div class='blur' data-controller="task" data-action="click->task#close"></div>
+
+	<div class="row">
+		{% if app.user %}
+			<div class="col-lg-6">
+				<button type="button" class="btn bg-custom2 mb-2 col-lg-12 d-inline" data-controller="task" data-action="click->task#editor">
+					Add task
+				</button>
+			</div>
+		{% endif %}
+		<div class="col-sm">
+
+			{% set arrPaths = app.request.pathinfo|split('/') %}
+
+			<select name="filter" class="form-control bg-custom2 col-lg-12 d-inline" onchange="location = this.value;">
+				<option value='#'>Filter by</option>
+			<option {% if arrPaths[3] ?? 0 == 0 %} selected {% endif %} value={{ base_url ~ '/' ~ arrPaths[2] ?? 'id_task' ~ '/0'}}>All statuses</option>
+				{% set arrayDublicates = [] %}
+				{% for choice in tasks_objects %}
+					{% if choice.status.name not in arrayDublicates %}
+						{% set arrayDublicates = arrayDublicates|merge([choice.status.name]) %}
+						<option {% if arrPaths[3] ?? 0 == choice.status.name %} selected {% endif %} value={{ base_url ~ '/' ~ arrPaths[2] ?? '0' ~ '/' ~ choice.status.id}}>{{ choice.status.name }}</option>
+					{% endif %}
+				{% endfor %}
+			</select>
+		</div>
+
+		<div class="col-sm">
+			<select name="sort" class="form-control bg-custom2 col-lg-12 d-inline" onchange="location = this.value;">
+				<option value='#' {% if arrPaths[2] ?? 0 == 0 %} selected {% endif %}>Sort by</option>
+				{% for key,choice in sort %}
+					<option {% if arrPaths[2] ?? 'id_task' == key %} selected {% endif %} value={{ base_url ~ '/' ~ key ~ '/' ~ arrPaths[3] ?? ''}}>{{ choice.1.name }}</option>
+				{% endfor %}
+			</select>
+		</div>
+	</div>
+	{% if app.user %}
+		<div class='adminBox' style="position: absolute; max-width: 1200px;">
+			{{form_start(addtaskForm)}}
+			<div class='row'>
+				<div class="col-sm-2" style="min-width:250px !important; max-width:250px; min-height:150px;">
+					<div class='uploadImg'>
+						<img src="{{ asset('build/missing.png') }}" alt='task'>
+						{{ form_row(addtaskForm.img, { label: ' '}) }}
+					</div>
+				</div>
+				<div class="col-sm">
+					{{ form_row(addtaskForm.task_name) }}
+					{{ form_row(addtaskForm.status) }}
+					{{ form_row(addtaskForm.completed_date) }}
+				</div>
+			</div>
+			{{ form_row(addtaskForm.task_description, { label: ' '}) }}
+			<div class='error'></div>
+			{{ form_row(addtaskForm.save) }}
+			{{form_end(addtaskForm)}}
+		</div>
+
+	{% endif %}
+	<div class="row">
+		{% for task in tasks %}
+			<div class="col-lg-6">
+				<div class='task col-lg-12 bg-custom bg-gradient' data-controller="task" data-action="click->task#view" tabindex='0'>
+					{% if app.user %}
+						<div class='options' tabindex='0'>
+							<i class="fa fa-angle-down" aria-hidden="true"></i>
+							<p class='edit' id='{{ task.id }}' data-controller="task" data-action="click->task#get">Edit</p>
+							<p class='delete' id='{{ task.id }}' data-controller="task" data-action="click->task#delete">Delete</p>
+						</div>
+					{% endif %}
+					<div class="row">
+						<div class="col-md-push position-relative" style="min-width:200px; min-height: 150px;">
+							<img src="{{ task.img }}" alt='task' data-controller="task" data-action="click->task#img">
+						</div>
+						<div class="col-md-push" style="margin-left: 10px;">
+							<h1>{{ task.taskName }}</h1>
+							<p>Status: {{ task.status.name }}</p>
+							<p>Add date: {{ task.addDate|date('Y-m-d') }}</p>
+							{% if task.completedDate != null %}
+							<p>Completed date: {{ task.completedDate|date('Y-m-d')  }}</p>
+							{% endif %}
+							<p>ID:
+								{{ task.id }}</p>
+						</div>
+					</div>
+					<div class='about'>
+						{{ task.taskDescription|raw  }}
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+{% endblock %}
